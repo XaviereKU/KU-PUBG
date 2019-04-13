@@ -6,27 +6,6 @@ import json
 from collections import OrderedDict
 import math
 
-def getrank(rankpt):
-	if rankpt == 0:
-		rank = 'unranked'
-	elif rankpt < 1400:
-		rank = 'Bronze'
-	elif 1400 <= rankpt < 1500:
-		rank = 'Silver'
-	elif 1500 <= rankpt < 1600:
-		rank = 'Gold'
-	elif 1600 <= rankpt < 1700:
-		rank = 'Platinum'
-	elif 1700 <= rankpt < 1800:
-		rank = 'Diamond'
-	elif 1800 <= rankpt < 1900:
-		rank = 'Elite'
-	elif 1900 <= rankpt < 2000:
-		rank = 'Master'
-	else:
-		rank = 'Grandmaster'
-	return rank
-
 def getseason(header):
 	getseason = "https://api.pubg.com/shards/pc-krjp/seasons"
 	seasonsourse = requests.get(getseason, headers=header)
@@ -98,7 +77,8 @@ def getstat(message, header, season):
 
 				if solo['roundsPlayed'] != 0:
 					#gathering stat data
-					sorankpt = int(solo['rankPoints'])
+					sorank = int(solo['rankPoints'])
+					soranktitle = solo['rankPointsTitle']
 					sogames = solo['roundsPlayed']
 					sowins = solo['wins']
 					sowinratio = round((sowins*100/sogames),2) 
@@ -106,8 +86,6 @@ def getstat(message, header, season):
 					soavgdmg = round((sodmg/sogames),0)
 					sokills = solo['kills']
 					soheads = solo['headshotKills']
-					# get solorank
-					sorank = getrank(sorankpt)
 					# k/d calc
 					if sogames != sowins:
 						sokd = round((sokills/(sogames-sowins)),2)
@@ -121,14 +99,15 @@ def getstat(message, header, season):
 					#add to embed
 					if len(x) == 4 and x[3] == '1':
 						embedstat.add_field(name='solo', value='rating : {}\nrank : {}\nwinratio : {}%\nk/d : {}\navgdmg : {}\nheads : {}%\ngames : {}'
-							.format(sorankpt, sorank, sowinratio, sokd, soavgdmg, soheadratio, sogames))
+							.format(sorank, soranktitle, sowinratio, sokd, soavgdmg, soheadratio, sogames))
 					elif len(x) == 3:
 						embedstat.add_field(name='solo', value='rating : {}\nrank : {}\nwinratio : {}%\nk/d : {}\navgdmg : {}\nheads : {}%\ngames : {}'
-							.format(sorankpt, sorank, sowinratio, sokd, soavgdmg, soheadratio, sogames))
+							.format(sorank, soranktitle, sowinratio, sokd, soavgdmg, soheadratio, sogames))
 					
 				if solofpp['roundsPlayed'] != 0:
 					#gathering stat data
-					sorankpt = int(solofpp['rankPoints'])
+					sorank = int(solofpp['rankPoints'])
+					soranktitle = solo['rankPointsTitle']
 					sogames = solofpp['roundsPlayed']
 					sowins = solofpp['wins']
 					sowinratio = round((sowins*100/sogames),2) 
@@ -136,8 +115,6 @@ def getstat(message, header, season):
 					soavgdmg = round((sodmg/sogames),0)
 					sokills = solofpp['kills']
 					soheads = solofpp['headshotKills']
-					# get solorank
-					sorank = getrank(sorankpt)
 					# k/d calc
 					if sogames != sowins:
 						sokd = round((sokills/(sogames-sowins)),2)
@@ -151,13 +128,14 @@ def getstat(message, header, season):
 					#add to embed
 					if len(x) == 4 and x[3] == '4':
 						embedstat.add_field(name='solo-fpp', value='rating : {}\nrank : {}\nwinratio : {}%\nk/d : {}\navgdmg : {}\nheads : {}%\ngames : {}'
-							.format(sorankpt, sorank, sowinratio, sokd, soavgdmg, soheadratio, sogames))
+							.format(sorank, soranktitle, sowinratio, sokd, soavgdmg, soheadratio, sogames))
 					elif len(x) == 3:
 						embedstat.add_field(name='solo-fpp', value='rating : {}\nrank : {}\nwinratio : {}%\nk/d : {}\navgdmg : {}\nheads : {}%\ngames : {}'
-							.format(sorankpt, sorank, sowinratio, sokd, soavgdmg, soheadratio, sogames))		
+							.format(sorank, soranktitle, sowinratio, sokd, soavgdmg, soheadratio, sogames))		
 
 				if duo['roundsPlayed'] != 0:
-					durankpt = int(duo['rankPoints'])
+					durank = int(duo['rankPoints'])
+					duranktitle = duo['rankPointsTitle']
 					dugames = duo['roundsPlayed']
 					duwins = duo['wins']
 					duwinratio = round((duwins*100/dugames),2) 
@@ -165,8 +143,6 @@ def getstat(message, header, season):
 					duavgdmg = round((dudmg/dugames),0)
 					dukills = duo['kills']
 					duheads = duo['headshotKills']
-					# get duorank
-					durank = getrank(durankpt)
 					# k/d calc
 					if dugames-duwins != 0:
 						dukd = round((dukills/(dugames-duwins)),2)
@@ -180,13 +156,14 @@ def getstat(message, header, season):
 					#add to embed
 					if len(x) == 4 and x[3] == '2':
 						embedstat.add_field(name='duo', value='rating : {}\nrank : {}\nwinratio : {}%\nk/d : {}\navgdmg : {}\nheads : {}%\ngames : {}'.
-							format(durankpt, durank, duwinratio, dukd, duavgdmg, duheadratio, dugames))
+							format(durank, duranktitle, duwinratio, dukd, duavgdmg, duheadratio, dugames))
 					elif len(x) == 3:
 						embedstat.add_field(name='duo', value='rating : {}\nrank : {}\nwinratio : {}%\nk/d : {}\navgdmg : {}\nheads : {}%\ngames : {}'.
-							format(durankpt, durank, duwinratio, dukd, duavgdmg, duheadratio, dugames))
+							format(durank, duranktitle, duwinratio, dukd, duavgdmg, duheadratio, dugames))
 					
 				if duofpp['roundsPlayed'] != 0:
-					durankpt = int(duofpp['rankPoints'])
+					durank = int(duofpp['rankPoints'])
+					duranktitle = duo['rankPointsTitle']
 					dugames = duofpp['roundsPlayed']
 					duwins = duofpp['wins']
 					duwinratio = round((duwins*100/dugames),2) 
@@ -194,8 +171,6 @@ def getstat(message, header, season):
 					duavgdmg = round((dudmg/dugames),0)
 					dukills = duofpp['kills']
 					duheads = duofpp['headshotKills']
-					# get duofpprank
-					durank = getrank(durankpt)
 					# k/d calc
 					if dugames-duwins != 0:
 						dukd = round((dukills/(dugames-duwins)),2)
@@ -209,14 +184,15 @@ def getstat(message, header, season):
 					#add to embed
 					if len(x) == 4 and x[3] == '5':
 						embedstat.add_field(name='duo-fpp', value='rating : {}\nrank : {}\nwinratio : {}%\nk/d : {}\navgdmg : {}\nheads : {}%\ngames : {}'.
-							format(durankpt, durank, duwinratio, dukd, duavgdmg, duheadratio, dugames))
+							format(durank, duranktitle, duwinratio, dukd, duavgdmg, duheadratio, dugames))
 					elif len(x) == 3:
 						embedstat.add_field(name='duo-fpp', value='rating : {}\nrank : {}\nwinratio : {}%\nk/d : {}\navgdmg : {}\nheads : {}%\ngames : {}'.
-							format(durankpt, durank, duwinratio, dukd, duavgdmg, duheadratio, dugames))		
+							format(durank, duranktitle, duwinratio, dukd, duavgdmg, duheadratio, dugames))		
 
 				if squad['roundsPlayed'] != 0:
 					#gathering stat data
-					sqrankpt = int(squad['rankPoints'])
+					sqrank = int(squad['rankPoints'])
+					sqranktitle = squad['rankPointsTitle']
 					sqgames = squad['roundsPlayed']
 					sqwins = squad['wins']
 					sqwinratio = round((sqwins*100/sqgames),2) 
@@ -224,8 +200,6 @@ def getstat(message, header, season):
 					sqavgdmg = round((sqdmg/sqgames),0)
 					sqkills = squad['kills']
 					sqheads = squad['headshotKills']
-					# get squad rank
-					sqrank = getrank(sqrankpt)
 					# k/d calc
 					if sqgames != sqwins:
 						sqkd = round((sqkills/(sqgames-sqwins)),2)
@@ -239,14 +213,15 @@ def getstat(message, header, season):
 					#add to embed
 					if len(x) == 4 and x[3] == '3':
 						embedstat.add_field(name='squad', value='rating : {}\nrank : {}\nwinratio : {}%\nk/d : {}\navgdmg : {}\nheads : {}%\ngames : {}'
-							.format(sqrankpt, sqrank, sqwinratio, sqkd, sqavgdmg, sqheadratio, sqgames))
+							.format(sqrank, sqranktitle, sqwinratio, sqkd, sqavgdmg, sqheadratio, sqgames))
 					elif len(x) == 3:
 						embedstat.add_field(name='squad', value='rating : {}\nrank : {}\nwinratio : {}%\nk/d : {}\navgdmg : {}\nheads : {}%\ngames : {}'
-							.format(sqrankpt, sqrank, sqwinratio, sqkd, sqavgdmg, sqheadratio, sqgames))
+							.format(sqrank, sqranktitle, sqwinratio, sqkd, sqavgdmg, sqheadratio, sqgames))
 
 				if squadfpp['roundsPlayed'] != 0:
 					#gathering stat data
-					sqrankpt = int(squadfpp['rankPoints'])
+					sqrank = int(squadfpp['rankPoints'])
+					sqranktitle = squad['rankPointsTitle']
 					sqgames = squadfpp['roundsPlayed']
 					sqwins = squadfpp['wins']
 					sqwinratio = round((sqwins*100/sqgames),2) 
@@ -254,8 +229,6 @@ def getstat(message, header, season):
 					sqavgdmg = round((sqdmg/sqgames),0)
 					sqkills = squadfpp['kills']
 					sqheads = squadfpp['headshotKills']
-					# get squadfpp rank
-					sqrank = getrank(sqrankpt)
 					# k/d calc
 					if sqgames != sqwins:
 						sqkd = round((sqkills/(sqgames-sqwins)),2)
@@ -269,10 +242,10 @@ def getstat(message, header, season):
 					#add to embed
 					if len(x) == 4 and x[3] == '6':
 						embedstat.add_field(name='squad-fpp', value='rating : {}\nrank : {}\nwinratio : {}%\nk/d : {}\navgdmg : {}\nheads : {}%\ngames : {}'
-							.format(sqrankpt, sqrank, sqwinratio, sqkd, sqavgdmg, sqheadratio, sqgames))
+							.format(sqrank, sqrank, sqwinratio, sqkd, sqavgdmg, sqheadratio, sqgames))
 					elif len(x) == 3:
 						embedstat.add_field(name='squad-fpp', value='rating : {}\nrank : {}\nwinratio : {}%\nk/d : {}\navgdmg : {}\nheads : {}%\ngames : {}'
-							.format(sqrankpt, sqrank, sqwinratio, sqkd, sqavgdmg, sqheadratio, sqgames))
+							.format(sqrank, sqrank, sqwinratio, sqkd, sqavgdmg, sqheadratio, sqgames))
 
 				if solo['roundsPlayed'] == 0 and duo['roundsPlayed'] == 0 and squad['roundsPlayed'] == 0 and solofpp['roundsPlayed'] == 0 and duofpp['roundsPlayed'] == 0 and squadfpp['roundsPlayed'] == 0:
 					embedstat = '플레이 기록이 없습니다.'
