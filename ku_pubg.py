@@ -46,8 +46,8 @@ async def on_message(message):
     id = message.author.id
     channel = message.channel
 
-    if message.content == '/test':
-        print('')
+    # if message.content == '/test':
+    #     print('')
 
     if message.content == '/구직' or message.content == '/구인' or message.content == '/ㄱㅇ' or message.content == '/ㄱㅈ' or message.content == '/RW' or message.content == '/rw' or message.content == '/RD' or message.content == '/rd':
         member = message.author
@@ -78,17 +78,17 @@ async def on_message(message):
     if message.content == '/롤' or message.content == '/lol' or message.content == '/칼바람' :
         await client.send_message(channel, "롤 주소는 https://discord.gg/y6qVgBs")
         
-    if message.content == '/똑똑' or message.content == '/안녕':
-        await client.send_message(channel, '반가워!')
+    # if message.content == '/똑똑' or message.content == '/안녕':
+    #     await client.send_message(channel, '반가워!')
 
-    if message.content == '/띵동':
-        await client.send_message(channel, '벨튀 금지ㅡㅡ')
+    # if message.content == '/띵동':
+    #     await client.send_message(channel, '벨튀 금지ㅡㅡ')
 
-    if message.content == '/여자친구':
-        await client.send_message(channel, '존재하지 않는 대상입니다.')
+    # if message.content == '/여자친구':
+    #     await client.send_message(channel, '존재하지 않는 대상입니다.')
 
-    if message.content == '/남자친구':
-        await client.send_message(channel, '존재하지 않는 대상입니다.')
+    # if message.content == '/남자친구':
+    #     await client.send_message(channel, '존재하지 않는 대상입니다.')
 
     if message.content == '/망겜' or message.content == '/공카':
         await client.send_message(channel, 'PUBG 공식 카페 공지사항 : <https://goo.gl/n45ZBj>')
@@ -107,7 +107,7 @@ async def on_message(message):
         
     if message.content == '/test':
         if message.author.id == '328859649069809664':
-            await client.send_message(channel, '/Running')
+            await client.send_message(channel, '18:30~익일 09:00 근무')
         else:
             return None
 
@@ -120,11 +120,6 @@ async def on_message(message):
         else:
             await client.send_message(channel, embed=result)
 
-    if message.content == '/랭크' or message.content == '/rank':
-        rankembed = discord.Embed()
-        rankembed.add_field(name='Rank Table', value='Bronze : 1~1399\n Silver : 1400~1499\n Gold : 1500~1599\n Platinum : 1600~1699\n Diamond : 1700~1799\n Elite : 1800~1899\n Master : 1900~1999\n Grandmaster : 2000~', inline=False)
-        await client.send_message(channel, embed=rankembed)
-
     if message.content == '/?' or message.content =='/help' or message.content =='/봇':
         embed = discord.Embed(color=0x4e7ecf)
         embed.add_field(name='/? /help /봇', value='도움말', inline=False)
@@ -132,7 +127,7 @@ async def on_message(message):
         embed.add_field(name='/고파스 /koreapas', value='고파스!', inline=False)
         embed.add_field(name='/구인 /구직 /ㄱㅈ /ㄱㅇ', value='구인구직(보이스 참여여부에 따라 자동인식)', inline=False)
         embed.add_field(name='/초대 ', value='1회용 초대 주소 생성', inline=False)
-        embed.add_field(name='rank, /랭크', value='점수별 랭크표', inline=False)
+        # embed.add_field(name='rank, /랭크', value='점수별 랭크표', inline=False)
         embed.add_field(name='/전적, /핵, /stat', value='전적검색. /전적?로 사용법을 알 수 있습니다.\n 라운드 종료 후 갱신됩니다.', inline=False)
         embed.set_footer(text = 'KU_PUBG Bot ver.181007')
         await client.send_message(channel, embed=embed)
