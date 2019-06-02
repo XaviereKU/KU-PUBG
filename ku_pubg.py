@@ -21,7 +21,10 @@ header = {
     "Accept": "application/vnd.api+json"
 }
 
-season = stats.getseason(header)
+statusurl = 'https://api.pubg.com/status'
+status = str(requests.get(statusurl))
+if status == '<Response [200]>':
+	season = stats.getseason(header)
 
 @client.event
 async def on_ready():
@@ -45,9 +48,6 @@ async def on_message(message):
 
     id = message.author.id
     channel = message.channel
-
-    # if message.content == '/test':
-    #     print('')
 
     if message.content == '/구직' or message.content == '/구인' or message.content == '/ㄱㅇ' or message.content == '/ㄱㅈ' or message.content == '/RW' or message.content == '/rw' or message.content == '/RD' or message.content == '/rd':
         member = message.author
@@ -77,24 +77,9 @@ async def on_message(message):
 
     if message.content == '/롤' or message.content == '/lol' or message.content == '/칼바람' :
         await client.send_message(channel, "롤 주소는 https://discord.gg/y6qVgBs")
-        
-    # if message.content == '/똑똑' or message.content == '/안녕':
-    #     await client.send_message(channel, '반가워!')
-
-    # if message.content == '/띵동':
-    #     await client.send_message(channel, '벨튀 금지ㅡㅡ')
-
-    # if message.content == '/여자친구':
-    #     await client.send_message(channel, '존재하지 않는 대상입니다.')
-
-    # if message.content == '/남자친구':
-    #     await client.send_message(channel, '존재하지 않는 대상입니다.')
 
     if message.content == '/망겜' or message.content == '/공카':
-        await client.send_message(channel, 'PUBG 공식 카페 공지사항 : <https://goo.gl/n45ZBj>')
-        
-    # if message.content == '/ㅅㅂ' or message.content == '/서버':
-    #     await client. send_message(channel, '이 명령어는 미국갔습니다.')
+        await client.send_message(channel, 'PUBG 공식 카페 공지사항 : <https://goo.gl/n45ZBj>')      
         
     if message.content == '/거울':
         rnd = random.randrange(1, 100)
@@ -106,19 +91,25 @@ async def on_message(message):
             await client.send_message(channel, '그 얼굴로 왜 게임하세요ㅠㅠ')
         
     if message.content == '/test':
+        global status
         if message.author.id == '328859649069809664':
-            await client.send_message(channel, '18:30~익일 09:00 근무')
+            await client.send_message(channel, '```평일 : 18:30~익일 09:00 근무\n 주말은 종일 근무```')
+            print(status)
         else:
             return None
 
     if message.content.startswith('/전적') or message.content.startswith('/stat') or message.content.startswith('/핵'):
         global season
-        text = message.content
-        result = stats.getstat(text,header,season)
-        if type(result) == str:
-            await client.send_message(channel,result)
+        global status
+        if status == '<Response [200]>':
+	        text = message.content
+	        result = stats.getstat(text,header,season)
+	        if type(result) == str:
+	            await client.send_message(channel,result)
+	        else:
+	            await client.send_message(channel, embed=result)
         else:
-            await client.send_message(channel, embed=result)
+        	await client.send_message(channel, '서버 오류. 잠시 후 다시 시도해 주세요.')
 
     if message.content == '/?' or message.content =='/help' or message.content =='/봇':
         embed = discord.Embed(color=0x4e7ecf)
@@ -127,7 +118,6 @@ async def on_message(message):
         embed.add_field(name='/고파스 /koreapas', value='고파스!', inline=False)
         embed.add_field(name='/구인 /구직 /ㄱㅈ /ㄱㅇ', value='구인구직(보이스 참여여부에 따라 자동인식)', inline=False)
         embed.add_field(name='/초대 ', value='1회용 초대 주소 생성', inline=False)
-        # embed.add_field(name='rank, /랭크', value='점수별 랭크표', inline=False)
         embed.add_field(name='/전적, /핵, /stat', value='전적검색. /전적?로 사용법을 알 수 있습니다.\n 라운드 종료 후 갱신됩니다.', inline=False)
         embed.set_footer(text = 'KU_PUBG Bot ver.181007')
         await client.send_message(channel, embed=embed)
@@ -154,3 +144,4 @@ client.run(token)
 #2018.09.18 핵 명령어 수정
 #2018.09.20 전적에 판수 추가.
 #2018.10.04 API 업데이트 반영 및 핵 명령어 전적과 통합.
+#2019.06.02 API 서버 상태 체크 후 작동
