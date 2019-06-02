@@ -23,7 +23,6 @@ header = {
 
 statusurl = 'https://api.pubg.com/status'
 status = str(requests.get(statusurl))
-print(status)
 if status == '<Response [200]>':
 	season = stats.getseason(header)
 
@@ -49,7 +48,12 @@ async def on_message(message):
 
 	id = message.author.id
 	channel = message.channel
-
+	
+	if message.content.startswith('/'):
+		print(message.author.name)
+		print(message.content)
+		print('------------------------------------------------------------')
+		
 	if message.content == '/구직' or message.content == '/구인' or message.content == '/ㄱㅇ' or message.content == '/ㄱㅈ' or message.content == '/RW' or message.content == '/rw' or message.content == '/RD' or message.content == '/rd':
 		member = message.author
 		voice = message.author.voice.voice_channel
